@@ -1,0 +1,42 @@
+<html>
+	<head>
+		<script
+			defer
+			src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+		></script>
+	</head>
+	<body>
+		<div x-data="app()">
+			<template x-for="todo in todos" :key="todo.id">
+				<div>
+                    <span x-text="`${todo.id}-${todo.description}-${String(todo.completed)}`"></span>
+                    <button @click="onToggle(todo.id)"">Toggle</button>
+                    <!-- <button on:click={() => onDelete(todo.id)}>Delete</button> -->
+                </div>
+			</template>
+		</div>
+		<script>
+			let ID_NUM = 1;
+			const createUniqueId = () => {
+				return `todo-${ID_NUM++}`;
+			};
+
+			let initialTodos = [
+				{ id: createUniqueId(), description: "hi", completed: false },
+				{ id: createUniqueId(), description: "tyler", completed: true },
+			];
+
+			function app() {
+				return {
+					todos: [...initialTodos],
+                    // reminder, arrow functions lose access to "this."
+					onToggle: function(id) {
+						this.todos = this.todos.map((t) => {
+							return t.id === id ? { ...t, completed: !t.completed } : t;
+						});
+					},
+				};
+			}
+		</script>
+	</body>
+</html>

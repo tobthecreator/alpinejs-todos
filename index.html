@@ -8,10 +8,15 @@
 	<body>
 		<div x-data="app()">
 			<div x-data="{description: ''}">
+				<!-- model is a two way data binding -->
 				<input type="test" x-model="description" />
 				<button @click="addTodo(description)">Add</button>
 			</div>
-			<template x-for="todo in todos" :key="todo.id">
+			<div>
+				Filter Completed:
+				<input type="checkbox" x-model="filter" />
+			</div>
+			<template x-for="todo in filteredTodos" :key="todo.id">
 				<div>
 					<span
 						x-text="`${todo.id}-${todo.description}-${String(todo.completed)}`"
@@ -35,6 +40,7 @@
 			function app() {
 				return {
 					todos: [...initialTodos],
+					filter: false,
 					// reminder, arrow functions lose access to "this."
 					onToggle: function (id) {
 						this.todos = this.todos.map((t) => {
@@ -54,6 +60,11 @@
 						};
 
 						this.todos.push(newTodo);
+					},
+					get filteredTodos() {
+						return !this.filter
+							? this.todos
+							: this.todos.filter((t) => !t.completed);
 					},
 				};
 			}

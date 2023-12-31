@@ -7,6 +7,10 @@
 	</head>
 	<body>
 		<div x-data="app()">
+			<div x-data="{description: ''}">
+				<input type="test" x-model="description" />
+				<button @click="addTodo(description)">Add</button>
+			</div>
 			<template x-for="todo in todos" :key="todo.id">
 				<div>
 					<span
@@ -41,6 +45,15 @@
 						this.todos = this.todos.filter((t) => {
 							return t.id !== id;
 						});
+					},
+					addTodo: function (description) {
+						const newTodo = {
+							id: createUniqueId(),
+							description,
+							completed: false,
+						};
+
+						this.todos.push(newTodo);
 					},
 				};
 			}
